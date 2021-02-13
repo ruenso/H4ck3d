@@ -3,14 +3,14 @@
 $error_array = array();  
 if(isset($_POST['login_button'])){
   $username = $_POST['log_username'];
-  $password = $_POST['log_password'];
+  $password = md5($_POST['log_password']);
   $_SESSION['username'] = $username;
 
   $check_query = mysqli_query($con,"SELECT * FROM user WHERE username='$username' AND password='$password'");
   
   if(mysqli_num_rows($check_query) == 1){
     $row = mysqli_fetch_array($check_query);
-    $password_db = mysqli_real_escape_string($con,$row['password']);
+    $password_db = mysqli_real_escape_string($con,md5($row['password']));
     $username_db = mysqli_real_escape_string($con,$row['username']);
       header("Location:login.php");
       exit();
@@ -25,7 +25,7 @@ if(isset($_POST['login_button'])){
 if(isset($_POST['reg_button'])){
   $username =mysqli_real_escape_string($con, $_POST['reg_username']);
   $name = mysqli_real_escape_string($con,$_POST['reg_name']);
-  $password = mysqli_real_escape_string($con,$_POST['reg_password']);
+  $password = mysqli_real_escape_string($con,md5($_POST['reg_password']));
   
   $check_query = mysqli_query($con, "SELECT * FROM user WHERE username='$username'");
   if(mysqli_num_rows($check_query) == 1){
